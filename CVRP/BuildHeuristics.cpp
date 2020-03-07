@@ -1,5 +1,6 @@
 #include "BuildHeuristics.hpp"
 #include "Structures.hpp"
+#include "Instance.hpp"
 
 #include <cfloat>
 #include <cmath>

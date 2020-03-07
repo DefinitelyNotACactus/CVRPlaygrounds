@@ -1,5 +1,6 @@
 #include "Neighbors.hpp"
 #include "Structures.hpp"
+#include "Instance.hpp"
 
 #include <cfloat>
 

@@ -3,6 +3,7 @@
 #include "BuildHeuristics.hpp"
 #include "LocalSearch.hpp"
 #include "Util.hpp"
+#include "Instance.hpp"
 
 #include <cfloat>
 

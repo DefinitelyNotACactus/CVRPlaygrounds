@@ -2,12 +2,8 @@
 #define Structures_hpp
 
 #include <vector>
-
-//Variaveis
-extern std::string instance;
-extern double ** matrizAdj; // matriz de adjacencia
-extern int *demands; // vetor de demandas
-extern int dimension, vehicles, actual_vehicles, capacity; // quantidade total de vertices, veiculos e capacidade dos veiculos
+#include <unordered_map>
+#include <string>
 
 // Estruturas
 struct insertionInfo {
@@ -42,4 +38,19 @@ struct client {
     }
 };
 
+struct solution {
+    double cost;
+    std::vector<route> routes;
+    
+    void print();
+    void initRoutes();
+};
+
+struct route_pool {
+    std::unordered_map<std::string, int> pool;
+    
+    void add(std::vector<int> &route, double cost);
+    void add(std::vector<route> &routes);
+    void print();
+};
 #endif /* Structures_hpp */
