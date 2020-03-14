@@ -42,6 +42,8 @@ struct solution {
     double cost;
     std::vector<route> routes;
     
+    double getCost(bool update);
+    
     void print();
     void initRoutes();
 };

@@ -8,6 +8,17 @@
 #define DEBUG_VALUES
 #endif
 
+double solution::getCost(bool update) {
+    if(update) {
+        cost = 0;
+        for(int i = 0; i < routes.size(); i++) {
+            cost += routes[i].cost;
+        }
+    }
+    
+    return cost;
+}
+
 void solution::print() {
     std::cout << "Instancia: " << instance << std::endl;
 
@@ -34,10 +45,10 @@ void solution::print() {
         std::cout << "Demanda: " << routes[i].load << std::endl;
 
         #ifdef DEBUG_VALUES
-        aux = getCost(routes[i].order_of_visit);
+        aux = getRouteCost(routes[i].order_of_visit);
         actual_total += aux;
         std::cout << "Custo (real): " << aux << std::endl;
-        std::cout << "Demanda (real): " << getDemand(routes[i].order_of_visit) << std::endl;
+        std::cout << "Demanda (real): " << getRouteLoad(routes[i].order_of_visit) << std::endl;
         std::cout << "Clientes[" << i << "] = {";
         for(int j = 0; j < routes[i].clients_set.size() - 1; j++) {
             std::cout << routes[i].clients_set[j] << ", ";

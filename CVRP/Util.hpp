@@ -2,7 +2,7 @@
 #define Util_hpp
 
 // Util
-double getCost(std::vector<int> &s);
-double getDemand(std::vector<int> &s);
+double getRouteCost(std::vector<int> &s);
+double getRouteLoad(std::vector<int> &s);
 
 #endif /* Util_hpp */

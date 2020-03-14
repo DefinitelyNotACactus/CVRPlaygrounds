@@ -9,7 +9,7 @@ using namespace std;
 /* Swap 1-1 intrarota */
 bool swap(vector<int> &st, double &cost) {
     double delta = DBL_MAX, nDelta = 0;
-    int index_a, index_b;
+    int index_a = 0, index_b = 0;
     for(int i = 1; i < st.size() - 1; i++) {
         for(int j = i + 1; j < st.size() - 1; j++) {
             if(i == j - 1) {
@@ -39,7 +39,7 @@ bool swap(vector<int> &st, double &cost) {
 
 bool interSwap(vector<route> &rl) {
     double delta = DBL_MAX, aux_da, aux_db, delta_a = 0, delta_b = 0;
-    int route_a, route_b, index_a, index_b, aux_dda, aux_ddb, demand_a, demand_b;
+    int route_a = 0, route_b = 0, index_a = 0, index_b = 0, aux_dda, aux_ddb, demand_a = 0, demand_b = 0;
     for(int a = 0; a < rl.size() - 1; a++) {
         for(int b = a + 1; b < rl.size(); b++) {
             for(int i = 1; i < rl[a].order_of_visit.size() - 1; i++) {
@@ -92,7 +92,7 @@ bool interSwap(vector<route> &rl) {
 /* 2-Opt intrarota */
 bool twoOpt(vector<int> &st, double &cost) {
     double delta = DBL_MAX, nDelta = 0;
-    int index_a, index_b;
+    int index_a = 0, index_b = 0;
     for(int i = 1; i < st.size() - 1; i++) {
         for(int j = i + 1; j < st.size() - 1; j++) {
             nDelta = matrizAdj[st.at(i - 1)][st.at(j)] + matrizAdj[st.at(j + 1)][st.at(i)] - matrizAdj[st.at(j + 1)][st.at(j)] - matrizAdj[st.at(i - 1)][st.at(i)];
@@ -121,7 +121,7 @@ bool twoOpt(vector<int> &st, double &cost) {
 /* Reinsercao intrarota */
 bool reinsertion(vector<int> &st, int subtourSize, double &cost) {
     double delta = DBL_MAX, nDelta = 0;
-    int index_a, index_b;
+    int index_a = 0, index_b = 0;
     for(int i = 1; i < st.size() - subtourSize; i++) {
         for(int j = 1; j < st.size() - 1; j++) {
             if(j >= i && j <= i + subtourSize) {
@@ -155,7 +155,7 @@ bool reinsertion(vector<int> &st, int subtourSize, double &cost) {
 /* Reinsercao interrota 1*/
 bool interReinsertion(vector<route> &rl) {
     double delta = DBL_MAX, aux_da, aux_db, delta_a = 0, delta_b = 0;
-    int route_a, route_b, index_a, index_b, aux_d, demand_delta;
+    int route_a = 0, route_b = 0, index_a = 0, index_b = 0, aux_d, demand_delta = 0;
     for(int a = 0; a < rl.size(); a++) {
         for(int b = 0; b < rl.size(); b++) {
             if(a == b) {
