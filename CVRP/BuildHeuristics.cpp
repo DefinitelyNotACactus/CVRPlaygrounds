@@ -58,18 +58,12 @@ void buildCheapestInsertion(vector<int> &s, vector<int> &cl) {
     }
 }
 
-void buildGreedyRandom(vector<int> &s, vector<int> &cl, int initialSubtour, double alpha) {
+void buildGreedyRandom(vector<int> &s, vector<int> &cl, double alpha) {
     s = {1, 1};
     vector<int> candidates = cl;
-    int targetIndex;
-    for(int i = 0; i < initialSubtour; i++) {
-        targetIndex = rand() % candidates.size();
-        s.insert(s.begin() + 1, candidates.at(targetIndex));
-        candidates.erase(candidates.begin() + targetIndex);
-    }
-
-    while (candidates.size() > 0) {
+    while(!candidates.empty()) {
         vector<insertionInfo> insertionCost((s.size() - 1) * candidates.size());
+        /* Obter as informações de inserção dos candidatos */
         for(int i = 1, l = 0; i < s.size(); i++) {
             for (int j = 0; j < candidates.size(); j++) {
                 insertionCost[l].cost = matrizAdj[s[i - 1]][candidates[j]] + matrizAdj[s[i]][candidates[j]] - matrizAdj[s[i - 1]][s[i]];
@@ -79,8 +73,18 @@ void buildGreedyRandom(vector<int> &s, vector<int> &cl, int initialSubtour, doub
             }
         }
         sort(insertionCost.begin(), insertionCost.end());
-        targetIndex = rand() % (int) floor(alpha * insertionCost.size());
-        s.insert(s.begin() + insertionCost[targetIndex].removedEdge, candidates[insertionCost[targetIndex].insertedNode]);
-        candidates.erase(candidates.begin() + insertionCost[targetIndex].insertedNode);
+        double max = insertionCost[insertionCost.size() - 1].cost, min = insertionCost[0].cost;
+        /* Adição a lista restrita de candidatos */
+        vector<insertionInfo> restrictedCandidates;
+        double limit = min + alpha * (max - min);
+        for(auto info : insertionCost) {
+            if(info.cost <= limit) {
+                restrictedCandidates.push_back(info);
+            }
+        }
+        /* Selecionar candidato e adicionar a solução */
+        int targetIndex = rand() % restrictedCandidates.size(); // Escolha aleatoria
+        s.insert(s.begin() + restrictedCandidates[targetIndex].removedEdge, candidates[restrictedCandidates[targetIndex].insertedNode]);
+        candidates.erase(candidates.begin() + restrictedCandidates[targetIndex].insertedNode);
     }
 }

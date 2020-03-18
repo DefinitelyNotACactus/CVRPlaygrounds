@@ -3,12 +3,16 @@
 
 #include "Instance.hpp"
 
-//Variaveis de instancia
+// Variáveis de instância
 std::string instance;
 double ** matrizAdj; // matriz de adjacencia
 int *demands; // vetor de demandas
 int dimension, vehicles, capacity; // quantidade total de vertices, veiculos e capacidade dos veiculos
 client *clients; // Conjunto de clientes da instancia
+
+// Variáveis da solução
+solution s;
+route_pool pool;
 
 void readInstance(std::string &instance) {
     std::ifstream file(instance);

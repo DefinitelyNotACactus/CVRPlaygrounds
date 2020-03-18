@@ -4,10 +4,6 @@
 
 #include <iostream>
 
-#ifndef DEBUG_VALUES
-#define DEBUG_VALUES
-#endif
-
 double solution::getCost(bool update) {
     if(update) {
         cost = 0;
@@ -133,7 +129,7 @@ void route_pool::add(std::vector<int> &route, double cost) {
 void route_pool::add(std::vector<route> &routes) {
     for(int i = 0; i  < routes.size(); i++) {
         std::string r = "";
-        for(int j = 0; j < routes[i].order_of_visit.size() - 2; j++) {
+        for(int j = 0; j < routes[i].order_of_visit.size() - 1; j++) {
             r = r + std::to_string(routes[i].order_of_visit[j]);
             r = r + " ";
         }
