@@ -10,7 +10,12 @@
 
 /* Metaheuristica interrota */
 void ILS(int max_itr_ils, double alpha, bool show) {
+    if(show) {
+        std::cout << "INICIO ILS" << std::endl;
+    }
     solution best_solution;
+    numberOfPertubations = 0;
+    differentCosts = 0;
     // Gerar solução inicial
     for(int i = 0; i < s.routes.size(); i++) {
         //buildNearestNeighbor(s.routes[i].order_of_visit, s.routes[i].clients_set); // TODO: Adicionar construção aleatória e gulosa
@@ -36,8 +41,13 @@ void ILS(int max_itr_ils, double alpha, bool show) {
     solution st = s;
     
     int itr_ils = 0, total_iterations = 0;
+    double oldCost = s.getCost(false);
     while(itr_ils < max_itr_ils) { // Critério de parada
+        if(total_iterations > 0) {
+            oldCost = st.getCost(false);
+        }
         // Perturbação
+        numberOfPertubations++;
         ejectionChain(st.routes);
         st.getCost(true);
         // Busca local
@@ -47,7 +57,9 @@ void ILS(int max_itr_ils, double alpha, bool show) {
         }
         
         pool.add(st.routes); // Adicionar ao pool
-        
+        if(st.getCost(false) != oldCost) {
+            differentCosts++;
+        }
         itr_ils++;
         total_iterations++;
         // Criterio de aceitacao
@@ -61,8 +73,12 @@ void ILS(int max_itr_ils, double alpha, bool show) {
     }
     
     if (show) {
+        std::cout << "\nFIM ILS" << std::endl;
         std::cout << "Custo final: " << best_solution.cost << std::endl;
         std::cout << "Iterações realizadas: " << total_iterations << std::endl;
+        // Número de vezes nas quais a pertubação fez com que o custo fosse diferente após a busca local
+        double eff = (double) differentCosts / (double) numberOfPertubations;
+        std::cout << "Eficácia pertubação: " << eff * 100 << "%\n" << std::endl;
     }
     
     s = best_solution;

@@ -4,6 +4,10 @@
 
 #include <iostream>
 
+#ifndef DEBUG_VALUES
+#define DEBUG_VALUES
+#endif
+
 double solution::getCost(bool update) {
     if(update) {
         cost = 0;
@@ -138,13 +142,13 @@ void route_pool::add(std::vector<route> &routes) {
     }
 }
 
-void route_pool::print() {
-    std::cout << "Vehicles: " << vehicles << std::endl;
-    std::cout << "Clients: " << dimension << std::endl;
-    std::cout << "Pool_size: " << pool.size() << std::endl;
+void route_pool::print(std::ostream &out) {
+    out << "Vehicles: " << vehicles << std::endl;
+    out << "Clients: " << dimension << std::endl;
+    out << "Pool_size: " << pool.size() << std::endl;
     for(auto r : pool) {
-        std::cout << "Route: " << r.first << std::endl;
-        std::cout << "Cost: " << r.second << std::endl;
+        out << "Route: " << r.first << std::endl;
+        out << "Cost: " << r.second << std::endl;
     }
-    std::cout << "END" << std::endl;
+    out << "END" << std::endl;
 }

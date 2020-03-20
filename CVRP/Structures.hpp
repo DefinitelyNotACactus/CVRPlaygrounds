@@ -53,6 +53,6 @@ struct route_pool {
     
     void add(std::vector<int> &route, double cost);
     void add(std::vector<route> &routes);
-    void print();
+    void print(std::ostream &out);
 };
 #endif /* Structures_hpp */

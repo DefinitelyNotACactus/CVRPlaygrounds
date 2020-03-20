@@ -16,6 +16,11 @@ extern client *clients; // Conjunto de clientes
 extern solution s;
 extern route_pool pool;
 
+// Outras variáveis
+extern unsigned int seed;
+extern unsigned int numberOfPertubations;
+extern unsigned int differentCosts;
+
 // Leitura da instancia e print da mesma
 void readInstance(std::string &instance);
 void printInstance();

@@ -14,6 +14,11 @@ client *clients; // Conjunto de clientes da instancia
 solution s;
 route_pool pool;
 
+// Outras variáveis
+unsigned int seed; // Seed do gerador de números aleatórios
+unsigned int numberOfPertubations; // Número de pertubações realizadas
+unsigned int differentCosts; // Número de vezes nas quais a pertubação resultou em custos diferentes
+
 void readInstance(std::string &instance) {
     std::ifstream file(instance);
     std::string aux;
@@ -52,6 +57,7 @@ void readInstance(std::string &instance) {
             file >> matrizAdj[i][j];
         }
     }
+    
     file.close();
 }
 
