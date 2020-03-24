@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     
     s.initRoutes();
     
-    ILS(50, 0.5, true);
+    ILS(100, 0.5, true);
         
     solvePool(false);
     

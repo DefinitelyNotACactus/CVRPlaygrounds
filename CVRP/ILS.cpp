@@ -34,7 +34,7 @@ void ILS(int max_itr_ils, double alpha, bool show) {
     
     pool.add(s.routes); // Adicionar solução inicial ao pool
     if (show) {
-        std::cout << "Custo incial (Após rvnd): " << s.cost << std::endl;
+        std::cout << "Custo incial (Após rvnd): " << s.getCost(true) << std::endl;
     }
     
     best_solution = s;
@@ -49,15 +49,13 @@ void ILS(int max_itr_ils, double alpha, bool show) {
         // Perturbação
         numberOfPertubations++;
         ejectionChain(st.routes);
-        st.getCost(true);
         // Busca local
         interRvnd(st.routes);
         for(int i = 0; i < st.routes.size(); i++) {
             rvnd(st.routes[i].order_of_visit, st.routes[i].cost);
         }
-        
         pool.add(st.routes); // Adicionar ao pool
-        if(st.getCost(false) != oldCost) {
+        if(st.getCost(true) != oldCost) { // Checar se resultou em um custo diferente do anterior
             differentCosts++;
         }
         itr_ils++;
@@ -67,7 +65,7 @@ void ILS(int max_itr_ils, double alpha, bool show) {
             best_solution = st;
             itr_ils = 0;
             if (show) {
-                std::cout << "Novo custo: " << best_solution.cost << std::endl;
+                std::cout << "Novo custo: " << best_solution.cost << " (Iteração = " << total_iterations << ")" << std::endl;
             }
         }
     }
@@ -76,7 +74,7 @@ void ILS(int max_itr_ils, double alpha, bool show) {
         std::cout << "\nFIM ILS" << std::endl;
         std::cout << "Custo final: " << best_solution.cost << std::endl;
         std::cout << "Iterações realizadas: " << total_iterations << std::endl;
-        // Número de vezes nas quais a pertubação fez com que o custo fosse diferente após a busca local
+        // Número de vezes nas quais a pertubação fez com que o custo resulte em um valor diferente após a busca local
         double eff = (double) differentCosts / (double) numberOfPertubations;
         std::cout << "Eficácia pertubação: " << eff * 100 << "%\n" << std::endl;
     }

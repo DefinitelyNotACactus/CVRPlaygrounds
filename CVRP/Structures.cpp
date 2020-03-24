@@ -4,10 +4,6 @@
 
 #include <iostream>
 
-#ifndef DEBUG_VALUES
-#define DEBUG_VALUES
-#endif
-
 double solution::getCost(bool update) {
     if(update) {
         cost = 0;
