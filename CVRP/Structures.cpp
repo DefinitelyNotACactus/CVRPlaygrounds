@@ -17,7 +17,8 @@ double solution::getCost(bool update) {
 
 void solution::print() {
     std::cout << "Instancia: " << instance << std::endl;
-
+    std::cout << "Seed: " << seed << std::endl;
+    
     #ifdef DEBUG_VALUES
     int *points = new int[dimension + 1];
     double actual_total = 0, aux;
@@ -123,18 +124,13 @@ void route_pool::add(std::vector<int> &route, double cost) {
        r = r + " ";
     }
     r = r + std::to_string(route[route.size() - 1]);
-    pool[r] = cost;
+    pool[r] = getRouteCost(route);
 }
 
 void route_pool::add(std::vector<route> &routes) {
     for(int i = 0; i  < routes.size(); i++) {
         std::string r = "";
-        for(int j = 0; j < routes[i].order_of_visit.size() - 1; j++) {
-            r = r + std::to_string(routes[i].order_of_visit[j]);
-            r = r + " ";
-        }
-        r = r + std::to_string(routes[i].order_of_visit[routes[i].order_of_visit.size() - 1]);
-        pool[r] = routes[i].cost;
+        add(routes[i].order_of_visit, routes[i].cost);
     }
 }
 

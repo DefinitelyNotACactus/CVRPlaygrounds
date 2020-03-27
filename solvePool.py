@@ -56,14 +56,14 @@ def createProblem(costs, routes, k, v):
     for i in range(len(costs)): # variaveis xr
         prob.variables.add(obj = [costs[i]], lb = [0], ub = [1], types = "I", names = ["x_" + str(i + 1)])
         
-    for i in range(2, v): # restricao dos clientes
+    for i in range(2, v + 1): # restricao dos clientes
         var_list = []
         coeff_list = []
         for j in range(len(costs)):
             var_list.append("x_" + str(j + 1))
             coeff_list.append(routes[j][i])
 
-        prob.linear_constraints.add(lin_expr = [[var_list, coeff_list]], senses = "E", rhs = [1], names = ["COV1_" + str(i + 1)])
+        prob.linear_constraints.add(lin_expr = [[var_list, coeff_list]], senses = "E", rhs = [1], names = ["COV1_" + str(i)])
 
     var_list = []
     coeff_list = []
@@ -78,11 +78,8 @@ def createProblem(costs, routes, k, v):
 def main():
     try:
         costs, true_routes, routes, k, dimension = readPool(sys.argv[1])
-        #print routes[9][2]
         prob = createProblem(costs, routes, k, dimension)
         prob.write("modelo.lp")
-        #prob.parameters.timelimit.set(int(sys.argv[2]))
-        #prob.parameters.threads.set(int((sys.argv[3])))
         prob.solve()
     except CplexError as exc:
         print(exc)
@@ -96,28 +93,9 @@ def main():
     print "Solution (Instance:", str(sys.argv[1]) + ")"
     
     for i in range(len(routes)):
-        if(prob.solution.get_values("x_" + str(i+1)) > 0.9):
+        if(prob.solution.get_values("x_" + str(i+1)) == 1):
             print true_routes[i]
-      
-#    ai = []
-#    aj = []
-#    for i in range(dim):
-#        for j in range(dim):
-#            if(prob.solution.get_values("x_" + str(i+1) + "_" + str(j+1)) > 0.9):
-#                #print "x_" + str(i+1) + "_" + str(j+1)
-#                ai.append(i)
-#                aj.append(j)
-#
-#
-#    sol = [ai[aj[0]] + 1]
-#    aux = ai[aj[0]]
-#
-#    for i in range(1, dim):
-#        aux = ai[aj[aux]]
-#        sol.append(aux+1)
-#
-#    print sol[::-1]
-    
+
 if __name__ == "__main__":
    main()
 

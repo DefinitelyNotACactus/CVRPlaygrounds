@@ -2,28 +2,29 @@
 #include "Instance.hpp"
 #include "Util.hpp"
 
-/* Pertubacao intrarota */
-void doubleBridge(std::vector<int> &s, std::vector<int> &st, double &cost, double &sCost) {
-    int interval = s.size() >> 2;
-    if(interval) {
-        int index_a = 1 + rand() % interval,
-        index_b = 1 + index_a + rand() % interval,
-        index_c = 1 + index_b + rand() % interval;
-
-        st.clear();
-        st.insert(st.end(), s.begin(), s.begin() + index_a);
-        st.insert(st.end(), s.begin() + index_c, s.end() - 1);
-        st.insert(st.end(), s.begin() + index_b, s.begin() + index_c);
-        st.insert(st.end(), s.begin() + index_a, s.begin() + index_b);
-        st.insert(st.end(), s.at(0));
-
-        //sCost = matrizAdj[s.at(index_a - 1)][s.at(index_c)] + matrizAdj[s.at(s.size() - 2)][s.at(index_b)] + matrizAdj[s.at(index_c - 1)][s.at(index_a)] + matrizAdj[s.at(index_b - 1)][s.at(0)] - matrizAdj[s.at(index_a - 1)][s.at(index_a)] - matrizAdj[s.at(index_b - 1)][s.at(index_b)] - matrizAdj[s.at(index_c - 1)][s.at(index_c)] - matrizAdj[s.at(s.size() - 2)][s.at(0)];
-        //sCost += cost;
-        sCost = getRouteCost(st);
+/* Perturbação intrarrota */
+void randomSwap(std::vector<int> &s, double &cost) {
+    if(s.size() < 4) { // Rota serve menos de 2 clientes, encerre
+        return;
     }
+    std::vector<int> st(s.begin() + 1, s.end() - 1); // copiar s sem incluir o depósito
+    int index_a = rand() % st.size(), index_b; // Escolher o primeiro indice aleatoriamente
+    do {
+        index_b = rand() % st.size();
+    } while(index_b != index_a); // Segundo indice deve ser diferente do primeiro
+    // Fazer o movimento
+    int aux = st[index_a];
+    st[index_a] = st[index_b];
+    st[index_b] = aux;
+    // Atualizar rota original
+    s.clear();
+    s.push_back(1);
+    s.insert(s.end(), st.begin(), st.end());
+    s.push_back(1);
+    cost = getRouteCost(s);
 }
 
-/* Pertubacao interrota, caso não seja possível aplicar em uma rota utiliza-se doubleBridge */
+/* Perturbação interrota */
 void ejectionChain(std::vector<route> &rl) {
     for(int i = 0; i < rl.size(); i++) {
         int next = (i + 1) % rl.size(), nextRouteLoad = rl[next].load;
@@ -51,10 +52,8 @@ void ejectionChain(std::vector<route> &rl) {
             rl[i].cost = getRouteCost(rl[i].order_of_visit);
             rl[i].load -= demands[moveable_clients[ejected]];
             rl[i].updateClients();
-        } else { // Usa double bridge (porém tamanho da rota tem de ser >= 4)
-            std::vector<int> st = rl[i].order_of_visit;
-            double sCost = rl[i].cost;
-            doubleBridge(rl[i].order_of_visit, st, rl[i].cost, sCost);
+        } else { // Caso não existam, faça um swap 1-1 intrarota aleatório
+            randomSwap(rl[i].order_of_visit, rl[i].cost);
         }
     }
 }

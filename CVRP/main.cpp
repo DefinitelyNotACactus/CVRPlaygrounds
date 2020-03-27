@@ -3,13 +3,8 @@
 #endif
 
 #include "Structures.hpp"
-#include "Neighbors.hpp"
-#include "BuildHeuristics.hpp"
-#include "LocalSearch.hpp"
-#include "Util.hpp"
 #include "ILS.hpp"
 #include "Instance.hpp"
-#include "Pertubation.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -33,14 +28,14 @@ int main(int argc, char** argv) {
     srand(seed);
     
     readInstance(instance);
-    
+
     s = solution();
     pool = route_pool();
     
     s.initRoutes();
     
-    ILS(100, 0.5, true);
-        
+    ILSv2(10, 10, 0.5, true);
+
     solvePool(false);
     
     deallocateInstance();
@@ -60,7 +55,6 @@ void solvePool(bool keep) {
         std::cout << "Erro ao manipular o arquivo do pool!" << std::endl;
         exit(-1);
     }
-    
     
     int status;
     

@@ -10,15 +10,11 @@
 
 /* Metaheuristica interrota */
 void ILS(int max_itr_ils, double alpha, bool show) {
-    if(show) {
-        std::cout << "INICIO ILS" << std::endl;
-    }
     solution best_solution;
     numberOfPertubations = 0;
     differentCosts = 0;
     // Gerar solução inicial
     for(int i = 0; i < s.routes.size(); i++) {
-        //buildNearestNeighbor(s.routes[i].order_of_visit, s.routes[i].clients_set); // TODO: Adicionar construção aleatória e gulosa
         buildGreedyRandom(s.routes[i].order_of_visit, s.routes[i].clients_set, alpha);
         s.routes[i].cost = getRouteCost(s.routes[i].order_of_visit);
         s.cost += s.routes[i].cost;
@@ -71,12 +67,46 @@ void ILS(int max_itr_ils, double alpha, bool show) {
     }
     
     if (show) {
-        std::cout << "\nFIM ILS" << std::endl;
         std::cout << "Custo final: " << best_solution.cost << std::endl;
         std::cout << "Iterações realizadas: " << total_iterations << std::endl;
         // Número de vezes nas quais a pertubação fez com que o custo resulte em um valor diferente após a busca local
         double eff = (double) differentCosts / (double) numberOfPertubations;
         std::cout << "Eficácia pertubação: " << eff * 100 << "%\n" << std::endl;
+    }
+    
+    s = best_solution;
+}
+
+void ILSv2(int max_itr_ils, int builds, double alpha, bool show) {
+    solution best_solution;
+    int totalPertubations = 0, totalDifferentCost = 0;
+    
+    if(show) {
+        std::cout << "Construção 1" << std::endl;
+    }
+    ILS(max_itr_ils, alpha, show);
+    totalPertubations = numberOfPertubations;
+    totalDifferentCost = differentCosts;
+    best_solution = s;
+    
+    for(int i = 2; i <= builds - 1; i++) {
+        if(show) {
+            std::cout << "Construção " << i << std::endl;
+        }
+        ILS(max_itr_ils, alpha, show);
+        totalPertubations += numberOfPertubations;
+        totalDifferentCost += differentCosts;
+        if(s.getCost(false) < best_solution.getCost(false)) {
+            best_solution = s;
+        }
+    }
+    
+    if(show) {
+        std::cout << "\nFIM ILS" << std::endl;
+        std::cout << "Custo final: " << best_solution.cost << std::endl;
+        // Número de vezes nas quais a pertubação fez com que o custo resulte em um valor diferente após a busca local
+        double eff = (double) totalDifferentCost / (double) totalPertubations;
+        std::cout << "Eficácia média pertubação: " << eff * 100 << "%\n" << std::endl;
     }
     
     s = best_solution;
